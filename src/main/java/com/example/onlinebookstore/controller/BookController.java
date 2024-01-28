@@ -42,9 +42,9 @@ public class BookController {
          return ResponseEntity.status(HttpStatus.CREATED).body("Book Added Successfully");
         else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't Add Book, Please Enter a Valid Date and The Title Must be Unique");
     }
-    @PutMapping("/update/{requestedId}")
-//   @PreAuthorize("hasAuthority('ADMIN')")
-    private ResponseEntity<Book> updateBook(@PathVariable Long requestedId, @RequestBody Book bookUpdated, Principal principal) {
+    @PostMapping("/update/{requestedId}")
+    //    @PreAuthorize("hasAuthority('ADMIN')")
+    private ResponseEntity<Book> updateBook(@PathVariable Long requestedId, @RequestBody Book bookUpdated) {
         Book book = bookService.updateBook(requestedId, bookUpdated);
         if (book != null) return ResponseEntity.status(HttpStatus.CREATED).body(book);
         else return ResponseEntity.badRequest().build();
