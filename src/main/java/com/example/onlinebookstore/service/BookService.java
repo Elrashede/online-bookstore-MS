@@ -56,11 +56,7 @@ public class BookService {
 
          updatedBook.setId(id);
 
-            //to prevent save books with the same title if the title is not changed
-         Book checkTitle=bookRepository.findByTitle(updatedBook.getTitle());
-         if(checkTitle!=null&&checkTitle.getId()!=id)
             bookRepository.save(updatedBook);
-         else if (checkTitle==null)bookRepository.save(updatedBook);
 
             return updatedBook;
         }

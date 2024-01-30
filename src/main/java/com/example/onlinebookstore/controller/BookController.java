@@ -2,13 +2,9 @@ package com.example.onlinebookstore.controller;
 
 import com.example.onlinebookstore.model.Book;
 import com.example.onlinebookstore.service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +20,6 @@ public class BookController {
     }
 
     @GetMapping("/{requestedId}")
-//   @PreAuthorize("hasAuthority('CUSTOMER') or hasRole(ADMIN)")
     private ResponseEntity<Book> findById(@PathVariable Long requestedId) {
         Optional<Book> foundBook = bookService.findBookByID(requestedId);
         if (foundBook.isPresent()) {
@@ -35,15 +30,13 @@ public class BookController {
     }
 
     @PostMapping("/add")
-//    @PreAuthorize("hasAuthority('ADMIN')")
     private ResponseEntity<String> addBook(@RequestBody Book newBook) {
         Book savedBook = bookService.addBook(newBook);
         if(savedBook!=null)
          return ResponseEntity.status(HttpStatus.CREATED).body("Book Added Successfully");
         else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't Add Book, Please Enter a Valid Date and The Title Must be Unique");
     }
-    @PostMapping("/update/{requestedId}")
-    //    @PreAuthorize("hasAuthority('ADMIN')")
+    @PutMapping("/update/{requestedId}")
     private ResponseEntity<Book> updateBook(@PathVariable Long requestedId, @RequestBody Book bookUpdated) {
         Book book = bookService.updateBook(requestedId, bookUpdated);
         if (book != null) return ResponseEntity.status(HttpStatus.CREATED).body(book);
@@ -51,7 +44,6 @@ public class BookController {
     }
 
     @GetMapping("/category/{category}")
-//   @PreAuthorize("hasAuthority('CUSTOMER')or hasRole(ADMIN)")
     private ResponseEntity<List<Book>> findByCategory(@PathVariable String category) {
         List<Book> foundBooks = bookService.findBooksByCategory(category);
         if (foundBooks.size()>0) {
@@ -61,7 +53,6 @@ public class BookController {
         }
     }
     @GetMapping("/borrow/{id}")
-//    @PreAuthorize("hasAuthority('CUSTOMER')or hasRole(ADMIN)")
     private ResponseEntity<String> requestToBorrowBook(@PathVariable Long id) {
         boolean availableBook = bookService.requestToBorrowBook(id);
         if (availableBook==true) {
